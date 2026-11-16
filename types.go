@@ -191,22 +191,40 @@ func (r jobRow) job() (Job, error) {
 	return j, nil
 }
 
+// JobGuide is one guide summary embedded in the jobs index: the guide's
+// identity, its search text, and its exam window (if any).
+type JobGuide struct {
+	ID     string `json:"id"`
+	Title  string `json:"title"`
+	Text   string `json:"text"`
+	Agency string `json:"agency"`
+	Keys   string `json:"keys"`
+	Exam   *struct {
+		Number string `json:"n"`
+		Start  string `json:"start"`
+		End    string `json:"end"`
+		Now    bool   `json:"now"`
+		When   string `json:"when"`
+	} `json:"exam"`
+	NoExam bool `json:"noExam"`
+}
+
 // JobsIndex is the /jobs/index.json feed: every open posting, sorted easiest
 // to get first, plus the category list and the date the data was checked.
 type JobsIndex struct {
-	AsOf       string   `json:"asOf"`
-	Categories []string `json:"categories"`
-	Rows       []Job    `json:"-"`
-	Guides     []string `json:"guides"`
+	AsOf       string     `json:"asOf"`
+	Categories []string   `json:"categories"`
+	Rows       []Job      `json:"-"`
+	Guides     []JobGuide `json:"guides"`
 }
 
 // UnmarshalJSON decodes the compact positional rows into Jobs.
 func (f *JobsIndex) UnmarshalJSON(data []byte) error {
 	var raw struct {
-		AsOf       string   `json:"asOf"`
-		Categories []string `json:"categories"`
-		Rows       []jobRow `json:"rows"`
-		Guides     []string `json:"guides"`
+		AsOf       string     `json:"asOf"`
+		Categories []string   `json:"categories"`
+		Rows       []jobRow   `json:"rows"`
+		Guides     []JobGuide `json:"guides"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
