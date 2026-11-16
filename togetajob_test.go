@@ -71,7 +71,7 @@ func TestGuides(t *testing.T) {
 
 func TestJobsDecodesPositionalRows(t *testing.T) {
 	c, close := testServer(t, func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`{"asOf":"2026-11-16","categories":["Office"],"rows":[["chief-financial-officer-808149","Chief Financial Officer","Department of Environmental Protection","$250,000 to $282,253 a year",250000,"other",[5,10,13],["office-admin","technology"],"Queens",1,0,"95202","2026-12-27","2026-10-28",1,"808149",1,"dep tech data fin"]],"guides":[]}`))
+		_, _ = w.Write([]byte(`{"asOf":"2026-11-16","categories":["Office"],"rows":[["chief-financial-officer-808149","Chief Financial Officer","Department of Environmental Protection","$250,000 to $282,253 a year",191526.4,"other",[5,10,13],["office-admin","technology"],"Queens",1,0,"95202","2026-12-27","2026-10-28",1,"808149",1,"dep tech data fin"]],"guides":[]}`))
 	})
 	defer close()
 
@@ -86,7 +86,7 @@ func TestJobsDecodesPositionalRows(t *testing.T) {
 	if j.Slug != "chief-financial-officer-808149" || j.Title != "Chief Financial Officer" {
 		t.Fatalf("unexpected job identity: %+v", j)
 	}
-	if j.PaySortKey != 250000 || j.Tier != "other" || j.BoroughLabel != "Queens" {
+	if j.PaySortKey != 191526.4 || j.Tier != "other" || j.BoroughLabel != "Queens" {
 		t.Fatalf("unexpected job fields: %+v", j)
 	}
 	if !j.FullTime || j.ExamRequired == nil || *j.ExamRequired {

@@ -88,7 +88,7 @@ type Job struct {
 	Title           string   `json:"title"`
 	Agency          string   `json:"agency"`
 	SalaryText      string   `json:"salaryText"`
-	PaySortKey      int      `json:"paySortKey"`
+	PaySortKey      float64  `json:"paySortKey"`
 	Tier            string   `json:"tier"`
 	CategoryIndexes []int    `json:"categoryIndexes"`
 	Tags            []string `json:"tags"`
@@ -115,6 +115,7 @@ func (r jobRow) job() (Job, error) {
 	var j Job
 	str := func(i int, dst *string) error { return json.Unmarshal(r[i], dst) }
 	num := func(i int, dst *int) error { return json.Unmarshal(r[i], dst) }
+	fnum := func(i int, dst *float64) error { return json.Unmarshal(r[i], dst) }
 	if err := str(0, &j.Slug); err != nil {
 		return j, err
 	}
@@ -127,7 +128,7 @@ func (r jobRow) job() (Job, error) {
 	if err := str(3, &j.SalaryText); err != nil {
 		return j, err
 	}
-	if err := num(4, &j.PaySortKey); err != nil {
+	if err := fnum(4, &j.PaySortKey); err != nil {
 		return j, err
 	}
 	if err := str(5, &j.Tier); err != nil {
